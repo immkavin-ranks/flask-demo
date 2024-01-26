@@ -6,9 +6,5 @@
 {% endblock %}
 
 {% block main %}
-  {% if username %}
-    Hello, {{ username }} !
-  {% else %} 
-    Hello, user!
-  {% endif %}
+    Hello, {{ user[0]['username'] }} 
 {% endblock %}
