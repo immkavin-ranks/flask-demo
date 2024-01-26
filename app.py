@@ -18,6 +18,7 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///users.db")
 
+
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -33,7 +34,6 @@ def index():
     """Show portfolio of stocks"""
     user = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])
 
-
     return render_template("index.html", user=user)
 
 
@@ -46,7 +46,6 @@ def login():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-
         # Ensure username was submitted
         if not request.form.get("username"):
             return apology("must provide username", 400)
@@ -56,10 +55,14 @@ def login():
             return apology("must provide password", 400)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rows = db.execute(
+            "SELECT * FROM users WHERE username = ?", request.form.get("username")
+        )
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+        if len(rows) != 1 or not check_password_hash(
+            rows[0]["hash"], request.form.get("password")
+        ):
             return apology("invalid username and/or password", 400)
 
         # Remember which user has logged in
@@ -100,12 +103,18 @@ def register():
         elif not request.form.get("confirmation"):
             return apology("must confirm password", 400)
 
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rows = db.execute(
+            "SELECT * FROM users WHERE username = ?", request.form.get("username")
+        )
 
         if len(rows) == 0:
             if request.form.get("password") == request.form.get("confirmation"):
                 pwd_hash = generate_password_hash(request.form.get("password"))
-                db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", request.form.get("username"), pwd_hash)
+                db.execute(
+                    "INSERT INTO users (username, hash) VALUES (?, ?)",
+                    request.form.get("username"),
+                    pwd_hash,
+                )
                 return redirect("/")
             else:
                 return apology("password confirmation fail", 400)
