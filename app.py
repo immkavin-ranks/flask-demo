@@ -1,7 +1,7 @@
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import apology, login_required
@@ -31,10 +31,10 @@ def after_request(response):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    username = db.execute("SELECT username FROM users WHERE user_id = ?", session["user_id"])
+    user = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])
 
 
-    return render_template("index.html", username=username)
+    return render_template("index.html", user=user)
 
 
 @app.route("/login", methods=["GET", "POST"])
