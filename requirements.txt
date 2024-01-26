@@ -1,7 +1,8 @@
 flask
+flask_session
 cs50
 bootstrap
 memegen.link
 sqlite3
 jinja2
-
+werkzeug
